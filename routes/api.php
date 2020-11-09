@@ -30,7 +30,7 @@ Route::get('/cp', function () {
 
     $con = Company::all();
 
-        return $con->pluck('id');
+        return $con;//->pluck('id');
 });
 
 Route::post('/company/create', function (Request $request){
