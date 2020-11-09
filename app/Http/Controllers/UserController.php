@@ -12,9 +12,9 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        return $request->user();
     }
 
 
@@ -41,7 +41,58 @@ class UserController extends Controller
     public function login(Request $request)
     {
 
+        //dd($request);
+        $data = $request->validate([
+
+            'firebaseUserID' => [/*'exists:users,firebaseUserID',*/'required'],
+            'phone_number' => 'required',
+            'email' => 'email|required'
+
+        ]);
+
+       //   dd($data);
+        $firebaseID = User::where('firebaseUserID',$data['firebaseUserID'])->first();
+
+                    //dd($firebaseID);
+        if(!$firebaseID)
+        {
+           /* $newUser = User::create([
+                'id'=>2,
+                'username'=>'test',
+                'firebaseUserID' => $data('firebaseUserID'),
+                'phone_number' => $data('phone_number'),
+                'email' => $data('email')
+
+            ]);*/
+            $newUser = new User();
+            $newUser->firebaseUserID = $data['firebaseUserID'];
+            $newUser->phone_number = $data['phone_number'];
+            $newUser->email = $data['email'];
+            $newUser->save();
+
+            $token =$newUser->createToken($data['firebaseUserID'])->plainTextToken;
+            $newUser = User::where('firebaseUserID',$data['firebaseUserID'])->first();
+            return response([$newUser,$token,"user never existed"],402);
+        }
+
+       elseif($firebaseID)
+       {
+         if(!$firebaseID['username'])
+         {
+             //dd($firebaseID,"this dont have username");
+                $token =$firebaseID->createToken($data['firebaseUserID'])->plainTextToken;
+             //dd($firebaseID,"this dont have username");
+             return response([$firebaseID,"user name not found"],402)->withCookie($token);
+         }
+         else {
+             $token =$firebaseID->createToken($data['firebaseUserID'])->plainTextToken;
+             return response([$firebaseID,$token],202);
+         }
+       }
+
+
     }
+
 
     public function store(Request $request)
     {

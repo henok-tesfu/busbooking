@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\App;
+use APP\Http\Controllers;
 use App\Http\Controllers\CompanyController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -41,8 +43,13 @@ Route::post('/company/create', function (Request $request){
      $newCompany = new Company();
      $newCompany->name = $date['name'];
      $newCompany->save();
-    return "success created!";
+    return "successfully created!";
 });
 
 Route::post('/login','App\Http\Controllers\AdminController@login');
+Route::post('/logout','App\Http\Controllers\AdminController@logout');
+Route::post('/user/login','App\Http\Controllers\UserController@login');
+
+Route::middleware('auth:sanctum')->get('/admin/login','App\Http\Controllers\AdminController@index');
+
 

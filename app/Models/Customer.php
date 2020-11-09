@@ -9,8 +9,5 @@ class Customer extends Model
 {
     use HasFactory;
 
-    public function Notification(){
 
-        return $this->hasMany(Notification::class);
-    }
 }
