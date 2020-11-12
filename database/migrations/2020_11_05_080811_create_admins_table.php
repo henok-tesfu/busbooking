@@ -17,7 +17,7 @@ class CreateAdminsTable extends Migration
             $table->bigIncrements('id');
             $table->foreignId('company_id');
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
-            $table->string('userName')->unique();
+            $table->string('user_name')->unique();
             $table->string('password');
             $table->foreignId('role_id');
             $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');

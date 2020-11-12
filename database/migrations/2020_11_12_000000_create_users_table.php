@@ -15,11 +15,11 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('username')->nullable();
+            $table->string('full_name')->nullable();
             $table->string('phone_number')->unique()->nullable();
             $table->string('email')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
-            $table->bigInteger('firebaseUserID')->unsigned()->unique();
+            $table->string('firebase_user_id')->unique();
             $table->foreignId('notification_id')->nullable();
             $table->foreign('notification_id')->references('id')->on('notifications')->onDelete('cascade');
             $table->rememberToken();

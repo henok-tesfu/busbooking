@@ -22,7 +22,9 @@ class TravelFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'startCityID'=>1,
+            'dropOfCityID'=>2,
+
         ];
     }
 }

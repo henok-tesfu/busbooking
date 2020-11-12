@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\CityController;
 use Illuminate\Support\Facades\App;
 use APP\Http\Controllers;
 use App\Http\Controllers\CompanyController;
@@ -46,10 +49,28 @@ Route::post('/company/create', function (Request $request){
     return "successfully created!";
 });
 
-Route::post('/login','App\Http\Controllers\AdminController@login');
-Route::post('/logout','App\Http\Controllers\AdminController@logout');
-Route::post('/user/login','App\Http\Controllers\UserController@login');
 
+//admin
+Route::post('/login',[AdminController::class, 'login']);
 Route::middleware('auth:sanctum')->get('/admin/login','App\Http\Controllers\AdminController@index');
+Route::post('/logout','App\Http\Controllers\AdminController@logout');
+Route::post('/login',[AdminController::class, 'login']);
+
+
+
+//user
+Route::post('/user/login','App\Http\Controllers\UserController@login');
+//Route::middleware('auth:sanctum')->get('/user/edit',[UserController::class,'index']);
+Route::middleware('auth:sanctum')->post('/user/{user}/update',[UserController::class,'update']);
+
+
+//city
+Route::get('/city',[CityController::class,'index']);
+Route::get('/city/from/{city}',[CityController::class,'travelFrom']);
+             //create if only super admin
+Route::middleware('auth:sanctum')->get('/city/create',[CityController::class,'create']);
+Route::middleware('auth:sanctum')->post('/city',[CityController::class,'store']);
+
+
 
 

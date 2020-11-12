@@ -10,26 +10,30 @@ use Illuminate\Support\Facades\Hash;
 class AdminController extends Controller
 {
 
+
+
+
     public  function login(Request $request)
     {
         //dd($request);
         $data =$request->validate([
 
-            'userName' => 'required', //exists:companies,userName',
+            'user_name' => 'required', //exists:companies,userName',
             'password' => 'required'
 
         ]);
 
-        //return "it got here";
-
-        $user = Admin::where('userName',$data['userName'])->first();
 
 
+        $user = Admin::where('user_name',$data['user_name'])->first();
+
+       //dd($user);
         if(!$user)
             return response('the provided username is incorrect');
         if (Hash::check($data['password'],$user->password))
         {
-            $token = $user->createToken($data['userName'])->plainTextToken;
+            $user->tokens()->delete();
+            $token = $user->createToken($data['user_name'])->plainTextToken;
                  return response([$user,$token])->withCookie($token);
         }
 
@@ -45,7 +49,7 @@ class AdminController extends Controller
         $this->guard()->logout();
 
         $request->session()->flush();
-
+// $request->user()->currentAccessToken()->delete();
         $request->session()->regenerate();
 //        Auth::logout();
 
@@ -56,7 +60,8 @@ class AdminController extends Controller
     public function index(Request $request)
     {
 
-
+//        dd($request->bearerToken());
+  //      dd(auth()->guard('sanctum')->user());
         return $request->user();
 
     }

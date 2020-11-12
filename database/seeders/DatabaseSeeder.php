@@ -3,8 +3,10 @@
 namespace Database\Seeders;
 
 use App\Models\Admin;
+use App\Models\City;
 use App\Models\Company;
 use App\Models\Role;
+use Database\Factories\CityFactory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -42,11 +44,16 @@ class DatabaseSeeder extends Seeder
         $admin = new Admin();
         $admin->id = 1;
         $admin->company_id = 1;
-        $admin->userName = "systemOwner";
+        $admin->user_name = "systemOwner";
         $admin->password = Hash::make("systemowner");
         $admin->role_id = 1;
         $admin->save();
 
+        $city = new City();
+        $city->name = "Addis Ababa";
+        $city->save();
+
+        City::factory(10)->make();
 
 
     }
