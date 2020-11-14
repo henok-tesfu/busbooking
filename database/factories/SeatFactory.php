@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Seat;
+use App\Models\Ticket;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class SeatFactory extends Factory
@@ -21,8 +22,13 @@ class SeatFactory extends Factory
      */
     public function definition()
     {
+        $arrayValues = ['booked', 'reserved', 'available'];
         return [
-            //
+        'seatNumber' =>$this->faker->unique()->numberBetween($min = 1, $max = 50),
+            'ticket_id'=> Ticket::factory()->create(),
+            'status'=>'reserved'
+            //'status'=>$arrayValues[rand(0,2)]
+
         ];
     }
 }

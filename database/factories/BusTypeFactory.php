@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\BusType;
+use App\Models\Company;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class BusTypeFactory extends Factory
@@ -22,7 +23,8 @@ class BusTypeFactory extends Factory
     public function definition()
     {
         return [
-            'name' => "BTYPE ".$this->faker->name,
+            'name'=>'BTN '.$this->faker->name,
+            'capacity'=>65
         ];
     }
 }

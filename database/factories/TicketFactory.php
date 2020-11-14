@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\Ticket;
+use App\Models\Travel;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class TicketFactory extends Factory
@@ -22,7 +24,9 @@ class TicketFactory extends Factory
     public function definition()
     {
         return [
-            //
+            //'number_of_seats'=>1,
+            'travel_id' => 1,
+            'user_id'=>User::factory()->create()
         ];
     }
 }

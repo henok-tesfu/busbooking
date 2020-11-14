@@ -19,9 +19,12 @@ class CreateTravelTable extends Migration
             $table->unsignedBigInteger('dropOfCityID');
             $table->foreignId('busType_id');
             $table->foreignId('company_id');
-
+            $table->string('side_number');
             $table->unsignedFloat('price');
+            $table->unsignedFloat('travel_km');
+            $table->unsignedInteger('travel_minutes');
 
+            $table->string('travel_pickup_time');
             $table->foreign('busType_id')->references('id')->on('bus_types')->onDelete('cascade');
 
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');

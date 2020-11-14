@@ -16,13 +16,19 @@ class CreateBusTypesTable extends Migration
         Schema::create('bus_types', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            // $table->foreignId('company_id');
-            // $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
+            $table->unsignedInteger('left_column_spam')->default(2);
+            $table->unsignedInteger('left_row_spam')->default(15);
+            $table->unsignedInteger('right_column_spam')->default(2);
+            $table->unsignedInteger('right_row_spam')->default(15);
+            $table->unsignedInteger('back_seat')->default(5);
+            //$table->foreignId('company_id');
+            //$table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
+            $table->unsignedInteger('capacity');
             $table->timestamps();
         });
     }
 
-    /**
+    /**f
      * Reverse the migrations.
      *
      * @return void

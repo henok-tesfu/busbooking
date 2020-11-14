@@ -6,6 +6,9 @@ use App\Models\Admin;
 use App\Models\City;
 use App\Models\Company;
 use App\Models\Role;
+use App\Models\Seat;
+use App\Models\Ticket;
+use App\Models\Travel;
 use Database\Factories\CityFactory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -53,7 +56,11 @@ class DatabaseSeeder extends Seeder
         $city->name = "Addis Ababa";
         $city->save();
 
-        City::factory(10)->make();
+        Company::factory(5)->create();
+        City::factory(10)->create();
+        Travel::factory(10)->create();
+        //Ticket::factory()->create();
+        Seat::factory(20)->create();
 
 
     }

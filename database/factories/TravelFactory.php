@@ -2,6 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\BusType;
+use App\Models\City;
+use App\Models\Company;
 use App\Models\Travel;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -21,10 +24,19 @@ class TravelFactory extends Factory
      */
     public function definition()
     {
+        $company = Company::all();
         return [
             'startCityID'=>1,
             'dropOfCityID'=>2,
-
+            'travel_km'=>100,
+            'travel_pickup_time' => '03:30:PM',
+            'travel_minutes'=>4000,
+            'busType_id'=>BusType::factory()->create(),
+            'company_id'=>2,//$this->faker->unique()->randomElement($company->pluck('id')),
+            'side_number'=>'BU'.$this->faker->numberBetween(100,1000),
+            'price'=>200,
+            'Gregorian'=>date('y/m/d'),
+            'local'=>date('y/m/d'),
         ];
     }
 }

@@ -16,7 +16,7 @@ class Company extends Model
         return $this->hasMany(Admin::class);
     }
 
-    public function travle()
+    public function travel()
     {
 
         return $this->hasOne(Travel::class);
