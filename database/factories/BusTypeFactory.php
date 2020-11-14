@@ -22,7 +22,7 @@ class BusTypeFactory extends Factory
     public function definition()
     {
         return [
-
+            'name' => "BTYPE ".$this->faker->name,
         ];
     }
 }

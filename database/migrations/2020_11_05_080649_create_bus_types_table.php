@@ -16,8 +16,8 @@ class CreateBusTypesTable extends Migration
         Schema::create('bus_types', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            $table->foreignId('company_id');
-            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
+            // $table->foreignId('company_id');
+            // $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -22,7 +22,7 @@ class CompanyFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name' => "CMP ".$this->faker->name,
         ];
     }
 }
