@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CityController;
+use App\Http\Controllers\TravelController;
 use Illuminate\Support\Facades\App;
 use APP\Http\Controllers;
 use App\Http\Controllers\CompanyController;
@@ -71,6 +72,9 @@ Route::get('/city/from/{city}',[CityController::class,'travelFrom']);
 Route::middleware('auth:sanctum')->get('/city/create',[CityController::class,'create']);
 Route::middleware('auth:sanctum')->post('/city',[CityController::class,'store']);
 
-
+//travel
+Route::post('/city/available-travel',[TravelController::class,'availableTravel']);
+Route::get('/reserved-seats/{travel}',[TravelController::class,'reservedSeats']);
+Route::middleware('auth:sanctum')->post('/book-travel',[TravelController::class,'bookTravel']);
 
 

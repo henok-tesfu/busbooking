@@ -52,23 +52,15 @@ class UserController extends Controller
 
         ]);
 
-        // $credentials = request(['user_name', 'password']);
-        // if(Auth::attempt($credentials));
-        // return "Wellcome";
 
-        //   dd($data);
+
+
         $firebaseID = User::where('firebase_user_id', $data['firebase_user_id'])->first();
 
         //dd($firebaseID);
-        if (!$firebaseID) {
-            /* $newUser = User::create([
-                 'id'=>2,
-                 'username'=>'test',
-                 'firebaseUserID' => $data('firebaseUserID'),
-                 'phone_number' => $data('phone_number'),
-                 'email' => $data('email')
+        if (!$firebaseID)
+        {
 
-             ]);*/
             $newUser = new User();
             $newUser->firebase_user_id = $data['firebase_user_id'];
             $newUser->phone_number = $data['phone_number'];
@@ -77,18 +69,26 @@ class UserController extends Controller
             $newUser->save();
 
             $token = $newUser->createToken($data['firebase_user_id'])->plainTextToken;
+
+
             $newUser = User::where('firebase_user_id', $data['firebase_user_id'])->first();
-            return response()->json(["user"=>$newUser, "token"=>$token], 202);
-        } elseif ($firebaseID) {
-            if (!$firebaseID['full_name']) {
+            return response()->json(["user"=>$newUser, "token"=>$token], 200);
+        } elseif ($firebaseID)
+        {
+            if (!$firebaseID['full_name'])
+            {
                 //dd($firebaseID,"this dont have username");
                 $firebaseID->tokens()->delete();
                 $token = $firebaseID->createToken($data['firebase_user_id'])->plainTextToken;
                 //dd($firebaseID,"this dont have username");
-                return response()->json(["user"=>$firebaseID, "token"=>$token], 202);
-            } else {
+
+                return response()->json(["user"=>$firebaseID, "token"=>$token], 200);
+            }
+            else
+            {
+                $firebaseID->tokens()->delete();
                 $token = $firebaseID->createToken($data['firebase_user_id'])->plainTextToken;
-                return response()->json(["user"=>$firebaseID, "token"=>$token], 202);
+                return response()->json(["user"=>$firebaseID, "token"=>$token], 200);
             }
         }
 
@@ -120,12 +120,7 @@ class UserController extends Controller
      */
     public function edit(Request $request)
     {
-        //dd($request->user()); the autorized user
-        //dd();
-        if (auth()->check()) {
 
-            redirect('/user/' . $request->user() . '/update');
-        }
     }
 
     /**
@@ -143,7 +138,7 @@ class UserController extends Controller
         //dd(auth()->check());
         // $display = $user->tokens()->first()->token;
         //dd($display);
-        return "here";
+       // return "here";
         $date = request()->validate([
             //'id'=>'exists:users,id',
             'full_name' => '',

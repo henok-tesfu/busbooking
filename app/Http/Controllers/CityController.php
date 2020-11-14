@@ -18,8 +18,30 @@ class CityController extends Controller
     {
 
         //return $city;
-        $travelFrom = Travel::where('startCityID',$city->id)->get();
+        $cities = [];
+        $travelFrom = Travel::where('startCityID',$city->id)->pluck('dropOfCityID');
+        foreach ($travelFrom as $travel){
+            if($this->dataExists($cities ,City::find($travel))){
+
+            }
+            else{
+                array_push($cities,City::find($travel));
+            }
+
+            //array_push($cities,City::find($travel));
+        }
+
+        return $cities;
 
 
     }
+
+
+    public function dataExists($cities , $travel)
+    {
+        return in_array( $travel,$cities);
+    }
+
+
+
 }
