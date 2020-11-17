@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\BusType;
+use App\Models\City;
 use App\Models\Company;
+use App\Models\Order;
 use App\Models\Seat;
 use App\Models\Ticket;
 use App\Models\Travel;
@@ -111,7 +113,9 @@ class TravelController extends Controller
               $reserveSeat = new Seat();
               for($i=0;$i<sizeof($seats);$i++)
               {
-                  $checker = Seat::where('seatNumber',$seats[$i])->first();
+
+                  $checker = Seat::where('seatNumber',$seats[$i])->where('travel_id',$data['travel_id'])->first();
+
                   if($checker)
                   {
 
@@ -124,7 +128,8 @@ class TravelController extends Controller
                   $ticket->seats()->create([
                       'seatNumber' =>$seats[$i],
                       'ticket_id'=>$ticket->id,
-                        'status'=>'reserved'
+                      'status'=>'reserved',
+                      'travel_id'=>$data['travel_id']
                   ]);
                   $ticket->save();
               }
@@ -135,7 +140,7 @@ class TravelController extends Controller
 
 
 
-    public function travelConfirm(Request $request)
+    public function order(Request $request)
     {
         $data =$request->validate([
 
@@ -147,28 +152,69 @@ class TravelController extends Controller
         if(auth()->check())
         {
             //$reserveSeat = new Seat();
+            $price = Travel::find($data['travel_id'])->price;
+            $order = new Order();
+            $order->total_price = $price * count($seats);
+            $order->save();
             for($i=0;$i<sizeof($seats);$i++)
             {
                 $checker = Seat::where('seatNumber',$seats[$i])->first();
-                if($checker)
-                {
+                $ticketOrder = Ticket::find($checker->id);
+                $price = Travel::find($ticketOrder->travel_id)->price;
 
-                    $checker->pending = true;
-                    $checker->save();
-                }
+
+                    $ticketOrder->order_id = $order->id;
+                    $ticketOrder->save();
 
 
             }
         }
-        return response()->json(["status"=>"seat pending"],200);
+        return response()->json(["status"=>"seat ordered"],200);
     }
 
-    public function pendingList(Request $request)
+    public function orderedList(Request $request)
     {
-
+        $travelInfo = [];
         $user = auth()->user()->id;
-       $ticket = Ticket::where('user_id',$user)->with('travel')->with('');
+       $tickets = Ticket::where('user_id',$user)->with('seats')->get();
+       $travelId = $tickets->pluck('travel_id')->unique();
+        $travels = Travel::whereIn('id',$travelId)->get();
 
+        $travels = $travels->map(function ($travel)
+        {
+            $travel->unSetRelation('company');
+            $travel->unSetRelation('busType');
+            $travel->unSetRelation('tickets');
+
+            $out = $travel->toArray();
+            $out['companyName'] = $travel->company->name;
+            $out['busName'] = $travel->busType->name;
+            $out['tickets'] = $travel->tickets()->whereNotNull('order_id')->get()->toArray();
+
+            return $out;
+        });
+
+
+//        foreach ($travels as $travel)
+//        {
+//            $travelInfo = [];
+//            $travel->companyName = $travel->company->name;
+//            $travel->busName = $travel->busType->name;
+//            $travel->unSetRelation('company');
+//            $travel->unSetRelation('busType');
+//            $travel->unSetRelation('tickets');
+//
+//            $tickets->where('travel_id', $travel->id);
+//               // foreach($tickets as ticket)
+//            $travel->tickets = $tickets->where('travel_id',$travel->id)
+//                                       ->whereNotNull('order_id')->toArray();
+//            //array_push($travelInfo,$ticketList);
+//
+//            //$travel->tickets = $travelInfo;
+//
+//        }
+
+       return $travels;
     }
 
 

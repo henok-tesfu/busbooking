@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 
@@ -12,6 +13,34 @@ class PaymentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function payForTicket(Request $request)
+    {
+      $data = $request->validate([
+
+          'bank_id'=>'required',
+          'reference_no'=>'required',
+          'order_id'=>'required'
+      ]);
+
+     // return auth()->user();
+
+      if(auth()->check())
+      {
+//          $payment = new Payment();
+//          $payment
+           $payment = Payment::create([
+                'bank_id'=> $data['bank_id'],
+                'reference_no'=> $data['reference_no']
+            ]);
+
+           // return $payment;
+           $order = Order::find($data['order_id']);
+           $order->payment_id = $payment->id;
+           $order->save();
+      }
+
+    }
+
     public function index()
     {
         //

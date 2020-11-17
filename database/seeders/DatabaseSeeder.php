@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Admin;
+use App\Models\Bank;
 use App\Models\City;
 use App\Models\Company;
 use App\Models\Role;
@@ -61,6 +62,11 @@ class DatabaseSeeder extends Seeder
         Travel::factory(10)->create();
         //Ticket::factory()->create();
         Seat::factory(20)->create();
+
+
+        Bank::factory()->create(['name'=>'Commercial Bank','bank_logo'=>'https://res.cloudinary.com/jethenk/image/upload/v1605531551/download_llfsgj.jpg']);
+        Bank::factory()->create(['name'=>'Dashen Bank','bank_logo'=>'https://res.cloudinary.com/jethenk/image/upload/v1605532106/download_1_lcwyfw.png']);
+        Bank::factory()->create(['name'=>'Zemen Bank','bank_logo'=>'https://res.cloudinary.com/jethenk/image/upload/v1605531533/download_hbuevj.png']);
 
 
     }

@@ -9,6 +9,10 @@ class Travel extends Model
 {
     use HasFactory;
 
+    protected $with = [
+      'startCity',
+      'dropOfCity',
+    ];
 
     public function tickets()
     {
@@ -24,4 +28,19 @@ class Travel extends Model
         return $this->belongsTo(Company::class,'company_id');
     }
 
+    public function startCity() {
+        return $this->belongsTo(City::class, 'startCityID');
+    }
+
+    public function dropOfCity() {
+        return $this->belongsTo(City::class, 'dropOfCityID');
+    }
+
+//    public function getStartCityNameAttribute() {
+//        return $this->startCity->name;
+//    }
+//
+//    public function getDropOfCityNameAttribute() {
+//        return $this->dropOfCity->name;
+//    }
 }
