@@ -17,6 +17,8 @@ class CreateTicketsTable extends Migration
             $table->id('id');
             $table->foreignId('user_id');
             $table->foreignId('travel_id');
+            $table->boolean('status')->default(false);
+            $table->unsignedInteger('payment_id')->nullable();
             $table->foreign('travel_id')->references('id')->on('travel')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

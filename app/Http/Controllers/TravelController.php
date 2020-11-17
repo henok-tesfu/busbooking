@@ -111,6 +111,12 @@ class TravelController extends Controller
               $reserveSeat = new Seat();
               for($i=0;$i<sizeof($seats);$i++)
               {
+                  $checker = Seat::where('seatNumber',$seats[$i])->first();
+                  if($checker)
+                  {
+
+                  return response()->json(["message"=>"seat have been taken"],409);
+                  }
                   $ticket = new Ticket();
                   $ticket->user_id = auth()->user()->id;
                   $ticket->travel_id =$data['travel_id'];
@@ -123,6 +129,48 @@ class TravelController extends Controller
                   $ticket->save();
               }
           }
-          return response("successfully",200);
+          return response()->json(["status"=>"successful"],200);
     }
+
+
+
+
+    public function travelConfirm(Request $request)
+    {
+        $data =$request->validate([
+
+            'travel_id'=>'exists:travel,id',
+            'seats'=> ["required","array","min:1"]
+        ]);
+
+        $seats = $data['seats'];
+        if(auth()->check())
+        {
+            //$reserveSeat = new Seat();
+            for($i=0;$i<sizeof($seats);$i++)
+            {
+                $checker = Seat::where('seatNumber',$seats[$i])->first();
+                if($checker)
+                {
+
+                    $checker->pending = true;
+                    $checker->save();
+                }
+
+
+            }
+        }
+        return response()->json(["status"=>"seat pending"],200);
+    }
+
+    public function pendingList(Request $request)
+    {
+
+        $user = auth()->user()->id;
+       $ticket = Ticket::where('user_id',$user)->with('travel')->with('');
+
+    }
+
+
+
 }

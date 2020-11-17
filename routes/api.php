@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\TravelController;
+use App\Http\Controllers\BankController;
 use Illuminate\Support\Facades\App;
 use APP\Http\Controllers;
 use App\Http\Controllers\CompanyController;
@@ -76,5 +77,12 @@ Route::middleware('auth:sanctum')->post('/city',[CityController::class,'store'])
 Route::post('/city/available-travel',[TravelController::class,'availableTravel']);
 Route::get('/reserved-seats/{travel}',[TravelController::class,'reservedSeats']);
 Route::middleware('auth:sanctum')->post('/book-travel',[TravelController::class,'bookTravel']);
+Route::middleware('auth:sanctum')->post('/book-travel/confirm',[TravelController::class,'travelConfirm']);
+//ticket
+Route::middleware('auth:sanctum')->get('/pending',[TravelController::class,'pendingList']);
+//Bank
+Route::get('/bank',[BankController::class,'index']);
+
+
 
 
