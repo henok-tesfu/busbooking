@@ -24,9 +24,10 @@ class SeatFactory extends Factory
     {
         $arrayValues = ['booked', 'reserved', 'available'];
         return [
-        'seatNumber' =>$this->faker->unique()->numberBetween($min = 1, $max = 50),
+        'seatNumber' =>$this->faker->unique()->numberBetween($min = 1, $max = 65),
             'ticket_id'=> Ticket::factory()->create(),
-            'status'=>'reserved'
+            'status'=>'reserved',
+            'travel_id'=>1,
             //'status'=>$arrayValues[rand(0,2)]
 
         ];

@@ -19,7 +19,9 @@ class CreateSeatsTable extends Migration
 
             $table->foreignId('ticket_id');
             $table->foreign('ticket_id')->references('id')->on('tickets')->onDelete('cascade');
+            $table->unsignedInteger('travel_id');
             $table->enum('status',['booked','reserved','available'])->default('available');
+            $table->boolean('pending')->default(false);
             $table->timestamps();
         });
     }

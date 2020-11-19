@@ -149,7 +149,7 @@ class UserController extends Controller
 
         //return $user->id;
 
-        $updateUser = $request->user();
+        $updateUser = auth()->user();
         // if the user is the owner
 
         if(auth()->check())
