@@ -38,12 +38,18 @@ class PaymentController extends Controller
            $order->payment_id = $payment->id;
            $order->save();
       }
+      return response(["successfully payed"],200);
 
     }
 
-    public function index()
+    public function orderedList(Request $request)
     {
-        //
+        $data = $request->validate([
+            'status'=>'required'
+        ]);
+
+
+
     }
 
     /**

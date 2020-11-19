@@ -9,7 +9,7 @@ class Ticket extends Model
 {
     use HasFactory;
 
-    protected $with = ['seats'];
+    protected $with = ['seats','order'];
 
     public function seats()
     {
@@ -25,6 +25,8 @@ class Ticket extends Model
     }
     public function order()
     {
-        return $this->hasOne(Order::class);
+        return $this->belongsTo(Order::class);
     }
+
+
 }

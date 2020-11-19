@@ -75,7 +75,7 @@ Route::get('/city/from/{city}',[CityController::class,'travelFrom']);
 Route::middleware('auth:sanctum')->get('/city/create',[CityController::class,'create']);
 Route::middleware('auth:sanctum')->post('/city',[CityController::class,'store']);
 
-//travel
+//travelp
 Route::post('/city/available-travel',[TravelController::class,'availableTravel']);
 Route::get('/reserved-seats/{travel}',[TravelController::class,'reservedSeats']);
 Route::middleware('auth:sanctum')->post('/book-travel',[TravelController::class,'bookTravel']);
@@ -87,6 +87,11 @@ Route::get('/bank',[BankController::class,'index']);
 
 //Payment
 Route::middleware('auth:sanctum')->post('/payment-for-order',[PaymentController::class,'payForTicket']);
+
+
+//user order
+Route::middleware('auth:sanctum')->get('/ticket',[PaymentController::class,'orderedList']);
+
 
 
 
