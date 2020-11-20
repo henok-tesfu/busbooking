@@ -9,7 +9,7 @@ class Order extends Model
 {
     use HasFactory;
     protected $guarded = [];
-    protected $with = ['payment'];
+//    protected $with = ['payment'];
 
     public function tickets()
     {

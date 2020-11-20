@@ -82,7 +82,7 @@ Route::get('/reserved-seats/{travel}',[TravelController::class,'reservedSeats'])
 Route::middleware('auth:sanctum')->post('/book-travel',[TravelController::class,'bookTravel']);
 Route::middleware('auth:sanctum')->post('/book-travel/order',[TravelController::class,'order']);
 //ticket
-Route::middleware('auth:sanctum')->get('/ordered',[TravelController::class,'orderedList']);
+//Route::middleware('auth:sanctum')->get('/ordered',[TravelController::class,'orderedList']);
 //Bank
 Route::get('/bank',[BankController::class,'index']);
 

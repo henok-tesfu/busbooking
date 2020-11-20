@@ -19,6 +19,8 @@ class CreateTicketsTable extends Migration
             $table->foreignId('travel_id');
             $table->boolean('status')->default(false);
             $table->foreignId('order_id')->nullable();
+            $table->string('for_name')->nullable();
+            $table->string('for_phone_no')->nullable();
             $table->foreign('travel_id')->references('id')->on('travel')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');

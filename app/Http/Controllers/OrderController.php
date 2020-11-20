@@ -25,54 +25,74 @@ class OrderController extends Controller
         if ($data['status'] == 'ordered'){
             $orderResonse = [];
             $orders = Order::where('user_id',$user)->where('payment_id' , null)->get();
+
             foreach($orders as $order){
                 $tickets = Ticket::where('order_id', $order->id)->get();
                 $ticketsResponse =[];
+                $travel= null ;
+                $busType= null;
+                $busCompany=null;
                 foreach($tickets as $ticket){
-                    $seats = Seat::where('ticket_id', $ticket->id)->lists('seatNumber')->toArray();
-                    $travel = Travel::where('id', $ticket->travel_id)->get();
-                    $busType = BusType::where('busType_id', $$travel->busType_id)->get();
-                    $busCompany = Company::where('id', $travel->company_id)->get();
+                    $seats = Seat::where('ticket_id', $ticket->id)->get();
+
+                    $travel = Travel::find( $ticket->travel_id);
+
+                    $busType = BusType::find( $travel->busType_id);
+
+                    $busCompany = Company::find($travel->company_id);
                     $ticket->seats = $seats;
-                    $ticket->treavel = $travel;
-                    $ticket->busType = $busType;
-                    $ticket->busCompany = $busCompany;
+
+
+                    $ticket->unSetRelation('order');
                     array_push($ticketsResponse , $ticket);
                 }
+                $order->travel = $travel;
+                $order->busType = $busType;
+                $order->busCompany = $busCompany;
                 $order->tickets = $ticketsResponse;
                 array_push($orderResonse, $order);
             }
             return response()->json(["orders"=>$orderResonse], 200);
         }
         else if ($data['status'] == 'pending'){
+
             $orderResonse = [];
             $pendingOrders =[];
-            $orders = Order::where('user_id',$user)->where('payment_id' , null)->get();
+            $orders = Order::where('user_id',$user)->get();
 
             foreach($orders as $order){
                 if($order->payment_id != null){
-                    $payment = Payment::find($order->payment_id)->get();
+                    $payment = Payment::find($order->payment_id);
+
                     if($payment->status == "pending"){
                         array_push($pendingOrders , $order);
                     }
                 }
+
             }
 
 
             foreach($pendingOrders as $order){
                 $tickets = Ticket::where('order_id', $order->id)->get();
                 $ticketsResponse =[];
+                $travel =null;
+                $busType = null;
+                $busCompany = null;
                 foreach($tickets as $ticket){
-                    $seats = Seat::where('ticket_id', $ticket->id)->lists('seatNumber')->toArray();
-                    $travel = Travel::where('id', $ticket->travel_id)->get();
-                    $busType = BusType::where('busType_id', $$travel->busType_id)->get();
-                    $busCompany = Company::where('id', $travel->company_id)->get();
+                    $seats = Seat::where('ticket_id', $ticket->id)->get();
+
+                    $travel = Travel::find( $ticket->travel_id);
+
+                    $busType = BusType::find( $travel->busType_id);
+
+                    $busCompany = Company::find( $travel->company_id);
                     $ticket->seats = $seats;
-                    $ticket->treavel = $travel;
-                    $ticket->busType = $busType;
-                    $ticket->busCompany = $busCompany;
+                    $ticket->unSetRelation('order');
                     array_push($ticketsResponse , $ticket);
                 }
+                $order->travel = $travel;
+                $order->busType = $busType;
+                $order->busCompany = $busCompany;
                 $order->tickets = $ticketsResponse;
                 array_push($orderResonse, $order);
             }
@@ -80,11 +100,11 @@ class OrderController extends Controller
         }else if ($data['status'] == 'declined'){
             $orderResonse = [];
             $pendingOrders =[];
-            $orders = Order::where('user_id',$user)->where('payment_id' , null)->get();
+            $orders = Order::where('user_id',$user)->get();
 
             foreach($orders as $order){
                 if($order->payment_id != null){
-                    $payment = Payment::find($order->payment_id)->get();
+                    $payment = Payment::find($order->payment_id);
                     if($payment->status == "rejected"){
                         array_push($pendingOrders , $order);
                     }
@@ -95,30 +115,37 @@ class OrderController extends Controller
             foreach($pendingOrders as $order){
                 $tickets = Ticket::where('order_id', $order->id)->get();
                 $ticketsResponse =[];
+                $travel = null;
+                $busCompany=null;
+                $busType=null;
                 foreach($tickets as $ticket){
-                    $seats = Seat::where('ticket_id', $ticket->id)->lists('seatNumber')->toArray();
-                    $travel = Travel::where('id', $ticket->travel_id)->get();
-                    $busType = BusType::where('busType_id', $$travel->busType_id)->get();
-                    $busCompany = Company::where('id', $travel->company_id)->get();
+                    $seats = Seat::where('ticket_id', $ticket->id)->get();
+
+                    $travel = Travel::find( $ticket->travel_id);
+
+                    $busType = BusType::find( $travel->busType_id);
+
+                    $busCompany = Company::find( $travel->company_id);
                     $ticket->seats = $seats;
-                    $ticket->treavel = $travel;
-                    $ticket->busType = $busType;
-                    $ticket->busCompany = $busCompany;
+                    $ticket->unSetRelation('order');
                     array_push($ticketsResponse , $ticket);
                 }
+                $order->travel = $travel;
+                $order->busType = $busType;
+                $order->busCompany = $busCompany;
                 $order->tickets = $ticketsResponse;
                 array_push($orderResonse, $order);
             }
             return response()->json(["orders"=>$orderResonse], 200);
         }
-        else if ($data['status'] == 'succecced'){
+        else if ($data['status'] == 'success'){
             $orderResonse = [];
             $pendingOrders =[];
-            $orders = Order::where('user_id',$user)->where('payment_id' , null)->get();
+            $orders = Order::where('user_id',$user)->get();
 
             foreach($orders as $order){
                 if($order->payment_id != null){
-                    $payment = Payment::find($order->payment_id)->get();
+                    $payment = Payment::find($order->payment_id);
                     if($payment->status == "accepted"){
                         array_push($pendingOrders , $order);
                     }
@@ -129,23 +156,30 @@ class OrderController extends Controller
             foreach($pendingOrders as $order){
                 $tickets = Ticket::where('order_id', $order->id)->get();
                 $ticketsResponse =[];
+                $busType=null;
+                $busCompany = null;
+                $travel = null;
                 foreach($tickets as $ticket){
-                    $seats = Seat::where('ticket_id', $ticket->id)->lists('seatNumber')->toArray();
-                    $travel = Travel::where('id', $ticket->travel_id)->get();
-                    $busType = BusType::where('busType_id', $$travel->busType_id)->get();
-                    $busCompany = Company::where('id', $travel->company_id)->get();
+                    $seats = Seat::where('ticket_id', $ticket->id)->get();
+
+                    $travel = Travel::find( $ticket->travel_id);
+
+                    $busType = BusType::find( $travel->busType_id);
+
+                    $busCompany = Company::find( $travel->company_id);
                     $ticket->seats = $seats;
-                    $ticket->treavel = $travel;
-                    $ticket->busType = $busType;
-                    $ticket->busCompany = $busCompany;
+                    $ticket->unSetRelation('order');
                     array_push($ticketsResponse , $ticket);
                 }
+                $order->travel = $travel;
+                $order->busType = $busType;
+                $order->busCompany = $busCompany;
                 $order->tickets = $ticketsResponse;
                 array_push($orderResonse, $order);
             }
             return response()->json(["orders"=>$orderResonse], 200);
         }else{
-            response()->json(["message"=>"invalid status request sent"],500);
+           return response()->json(["message"=>"invalid status request sent"],500);
         }
 
 

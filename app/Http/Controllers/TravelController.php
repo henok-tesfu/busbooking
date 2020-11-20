@@ -104,9 +104,9 @@ class TravelController extends Controller
           $data =$request->validate([
 
           'travel_id'=>'exists:travel,id',
-            'seats'=> ["required","array","min:1"]
+            'seats'=> ["required","array","min:1"],
           ]);
-
+           return $data;
           $seats = $data['seats'];
 
           if(auth()->check())
@@ -115,7 +115,7 @@ class TravelController extends Controller
               for($i=0;$i<sizeof($seats);$i++)
               {
 
-                  $checker = Seat::where('seatNumber',$seats[$i])
+                  $checker = Seat::where('seatNumber',$data['seats'][$i]['seat'])
                                  ->where('travel_id',$data['travel_id'])
                                  ->first();
                   $busId = Travel::find($data['travel_id']);
@@ -126,12 +126,17 @@ class TravelController extends Controller
 
                   return response()->json(["message"=>"seat have been taken"],409);
                   }
-                  if($seats[$i] < $capacity)
+                  if($data['seats'][$i]['seat'] < $capacity)
                   {
                       $ticket = new Ticket();
                       $ticket->user_id = auth()->user()->id;
                       $ticket->travel_id = $data['travel_id'];
+                      if (isset($data['seats'][$i]['name']))
+                      $ticket->for_name = $data['seats'][$i]['name'];
+                      if (isset($data['seats'][$i]['phone']))
+                      $ticket->for_name = $data['seats'][$i]['phone'];
                       $ticket->save();
+
                       $ticket->seats()->create([
                           'seatNumber' => $seats[$i],
                           'ticket_id' => $ticket->id,
@@ -166,6 +171,7 @@ class TravelController extends Controller
             //$reserveSeat = new Seat();
             $price = Travel::find($data['travel_id'])->price;
             $order = new Order();
+            $order->user_id = auth()->user()->id;
             $order->total_price = $price * count($seats);
             $order->save();
             for($i=0;$i<sizeof($seats);$i++)
