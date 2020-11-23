@@ -15,8 +15,8 @@ class CreateTravelTable extends Migration
     {
         Schema::create('travel', function (Blueprint $table) {
             $table->id('id');
-            $table->unsignedBigInteger('startCityID');
-            $table->unsignedBigInteger('dropOfCityID');
+            $table->unsignedBigInteger('startCityId');
+            $table->unsignedBigInteger('dropOfCityId');
             $table->foreignId('busType_id');
             $table->foreignId('company_id');
             $table->string('side_number');

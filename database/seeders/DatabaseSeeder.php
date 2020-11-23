@@ -33,25 +33,7 @@ class DatabaseSeeder extends Seeder
 
         //role
                 //***superAdmin role
-        $role = new Role();
-        $role->id = 1;
-        $role->name = "superadmin";
-        $role->save();
-              //***Admin role
-        $role = new Role();
-        $role->id = 2;
-        $role->name = "admin";
-        $role->save();
 
-        //Admin table
-
-        $admin = new Admin();
-        $admin->id = 1;
-        $admin->company_id = 1;
-        $admin->user_name = "systemOwner";
-        $admin->password = Hash::make("systemowner");
-        $admin->role_id = 1;
-        $admin->save();
 
         $city = new City();
         $city->name = "Addis Ababa";
@@ -68,6 +50,29 @@ class DatabaseSeeder extends Seeder
         Bank::factory()->create(['name'=>'Dashen Bank','bank_logo'=>'https://res.cloudinary.com/jethenk/image/upload/v1605532106/download_1_lcwyfw.png']);
         Bank::factory()->create(['name'=>'Zemen Bank','bank_logo'=>'https://res.cloudinary.com/jethenk/image/upload/v1605531533/download_hbuevj.png']);
 
+       Role::factory()->create(['name'=>'checker']);
+       Role::factory()->create(['name'=>'finance']);
+       Role::factory()->create(['name'=>'dispatcher']);
+       Role::factory()->create(['name'=>'admin']);
 
+
+        //Admin table
+
+        $admin = new Admin();
+        $admin->id = 1;
+        //$admin->company_id = 1;
+        $admin->email = "systemOwner@systemOwner.com";
+        $admin->type = "systemOwner";
+        $admin->password = Hash::make("systemowner");
+        $admin->role_id = 4;
+        $admin->save();
+
+        $admin = new Admin();
+        $admin->company_id = 1;
+        $admin->email = "checker@checker.com";
+        $admin->type = "company";
+        $admin->password = Hash::make("checker");
+        $admin->role_id = 1;
+        $admin->save();
     }
 }

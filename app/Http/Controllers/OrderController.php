@@ -9,6 +9,7 @@ use App\Models\Payment;
 use App\Models\Seat;
 use App\Models\Ticket;
 use App\Models\Travel;
+use App\Models\User;
 use Illuminate\Http\Request;
 use PhpParser\Node\Stmt\Foreach_;
 
@@ -184,4 +185,25 @@ class OrderController extends Controller
 
 
     }
+
+
+    public function index()
+    {
+        $orders = Order::all();
+
+        foreach ($orders as $order)
+        {
+
+
+            $userName = User::find($order->user_id)->full_name;
+            $payment = Payment::find($order->payment_id)->status;
+            $numberOfTicket = Ticket::where('order_id',$order->id)->count();
+            $order->userName =$userName;
+            $order->paymentStatus =$payment;
+            $order->numberOfTicket =$numberOfTicket;
+        }
+
+
+    }
+
 }

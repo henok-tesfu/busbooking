@@ -17,8 +17,7 @@ class CompanyController extends Controller
         $con = Company::all();
 
       return $con;
-//       dd($con);
-//        return "check";
+
 
     }
 
@@ -29,7 +28,7 @@ class CompanyController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -40,7 +39,15 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $date = $request->validate([
+            'name'=>'required|string'
+
+        ]);
+
+        $newCompany = new Company();
+        $newCompany->name = $date['name'];
+        $newCompany->save();
+        return "successfully created!";
     }
 
     /**

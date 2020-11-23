@@ -18,22 +18,22 @@ class AdminController extends Controller
         //dd($request);
         $data =$request->validate([
 
-            'user_name' => 'required', //exists:companies,userName',
+            'email' => 'required|email', //exists:companies,userName',
             'password' => 'required'
 
         ]);
 
 
 
-        $user = Admin::where('user_name',$data['user_name'])->first();
+        $user = Admin::where('email',$data['email'])->with('roles')->first();
 
        //dd($user);
         if(!$user)
-            return response('the provided username is incorrect');
+            return response(['the provided email is incorrect'],401);
         if (Hash::check($data['password'],$user->password))
         {
             $user->tokens()->delete();
-            $token = $user->createToken($data['user_name'])->plainTextToken;
+            $token = $user->createToken($data['email'])->plainTextToken;
                  return response([$user,$token])->withCookie($token);
         }
 

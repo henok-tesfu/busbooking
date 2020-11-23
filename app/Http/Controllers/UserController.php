@@ -96,40 +96,13 @@ class UserController extends Controller
     }
 
 
-    public function store(Request $request)
+    public function logout(Request $request)
     {
+        auth()->user()->tokens()->delete();
 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param \App\Models\User $user
-     * @return \Illuminate\Http\Response
-     */
-    public function show(User $user)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\Models\User $user
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Request $request)
-    {
-
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\User $user
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, User $user)
     {
         // add policy if the user is the owner
@@ -175,16 +148,4 @@ class UserController extends Controller
 
     }
 
-
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(User $user)
-    {
-        //
-    }
 }

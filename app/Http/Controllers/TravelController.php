@@ -298,31 +298,23 @@ class TravelController extends Controller
 
 
 
-    public function failedOrder(Request $request)
+    public function create(Request $request)
     {
+       $data = $request->validate([
+          'startCityID'=>'required|exist:cities,id',
+           'dropOfCityId'=>'required|exist:cities,id',
+           'busType_id'=>'required|exist:busTypes,id',
+           'company_id'=>'required|exist:companies,id',
+           'side_number'=>'required',
+           'price'=>'required',
+           'travel_km'=>'required',
+           'travel_minutes'=>'required',
+           'travel_pickup_time'=>['required','date_format:H:i'],
+           'Gregorian'=>['required','date'],
+           'local'=>['required','date']
+       ]);
+           $create = Travel::create($data);
 
-
-                        $user = auth()->user()->id;
-                        $tickets = Ticket::where('user_id',$user)->with('seats')->get();
-                        $travelId = $tickets->pluck('travel_id')->unique();
-                        $travels = Travel::whereIn('id',$travelId)->get();
-
-                        $travels = $travels->map(function ($travel)
-                        {
-                            $travel->unSetRelation('company');
-                            $travel->unSetRelation('busType');
-                            $travel->unSetRelation('tickets');
-
-                            $out = $travel->toArray();
-                            $out['companyName'] = $travel->company->name;
-                            $out['busName'] = $travel->busType->name;
-                            $out['tickets'] = $travel->tickets()->whereNull('order_id')->get()->toArray();
-
-                            return $out;
-                        });
-
-                        return $travels;
-
-                    }
+    }
 
 }
