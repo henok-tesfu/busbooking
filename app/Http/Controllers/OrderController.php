@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BusType;
+use App\Models\City;
 use App\Models\Company;
 use App\Models\Order;
 use App\Models\Payment;
@@ -189,19 +190,55 @@ class OrderController extends Controller
 
     public function index()
     {
-        $orders = Order::all();
+       $superAdmin = request()->user();
+       if($superAdmin->type == 'booking_company')
+       {
+           $orders = Order::all();
 
-        foreach ($orders as $order)
-        {
+           foreach ($orders as $order)
+           {
 
 
-            $userName = User::find($order->user_id)->full_name;
-            $payment = Payment::find($order->payment_id)->status;
-            $numberOfTicket = Ticket::where('order_id',$order->id)->count();
-            $order->userName =$userName;
-            $order->paymentStatus =$payment;
-            $order->numberOfTicket =$numberOfTicket;
-        }
+               $userName = User::find($order->user_id)->full_name;
+
+               $paymentCheck = Payment::find($order->payment_id);
+               if($paymentCheck)
+                $payment = $paymentCheck->status;
+               else
+                   $payment = "not paid";
+               $numberOfTicket = Ticket::where('order_id',$order->id)->count();
+               $order->name =$userName;
+               $order->paymentStatus =$payment;
+               $order->numberOfTicket =$numberOfTicket;
+           }
+           return $orders;
+       }
+       elseif ($superAdmin->type == 'company')
+       {
+           $orders = Order::where('company_id',$superAdmin->company_id)->get();
+           foreach ($orders as $order)
+           {
+
+
+               $userName = User::find($order->user_id)->full_name;
+
+               $paymentCheck = Payment::find($order->payment_id);
+               if($paymentCheck)
+                   $payment = $paymentCheck->status;
+               else
+                   $payment = "not paid";
+               $numberOfTicket = Ticket::where('order_id',$order->id)->count();
+               $order->name =$userName;
+               $order->paymentStatus =$payment;
+               $order->numberOfTicket =$numberOfTicket;
+           }
+           return $orders;
+       }
+
+       else{
+           return response(['an Authorized user'],401);
+       }
+
 
 
     }

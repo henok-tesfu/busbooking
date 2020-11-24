@@ -62,13 +62,21 @@ class DatabaseSeeder extends Seeder
         $admin->id = 1;
         //$admin->company_id = 1;
         $admin->email = "systemOwner@systemOwner.com";
-        $admin->type = "systemOwner";
+        $admin->type = "booking_company";
         $admin->password = Hash::make("systemowner");
         $admin->role_id = 4;
         $admin->save();
 
         $admin = new Admin();
         $admin->company_id = 1;
+        $admin->email = "companyAdmin@companyAdmin.com";
+        $admin->type = "company";
+        $admin->password = Hash::make("companyAdmin");
+        $admin->role_id = 4;
+        $admin->save();
+
+
+        $admin = new Admin();
         $admin->email = "checker@checker.com";
         $admin->type = "company";
         $admin->password = Hash::make("checker");

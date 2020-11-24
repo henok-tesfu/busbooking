@@ -197,102 +197,102 @@ class TravelController extends Controller
         return response()->json(["status"=>"seat ordered"],200);
     }
 
-    public function orderedList(Request $request)
-    {
-
-        $data = $request->validate([
-           'status'=>'required'
-        ]);
-
-
-        $user = auth()->user()->id;
-       $tickets = Ticket::where('user_id',$user)->with('seats')->get();
-       $travelId = $tickets->pluck('travel_id')->unique();
-        $travels = Travel::whereIn('id',$travelId)->get();
-
-
-        $travels = $travels->map(function ($travel) use ($data)
-        {
-            $travel->unSetRelation('company');
-            $travel->unSetRelation('busType');
-            $travel->unSetRelation('tickets');
-
-            $out = $travel->toArray();
-            $out['companyName'] = $travel->company->name;
-            $out['busName'] = $travel->busType->name;
-            $allTickets = $travel->tickets()->whereNotNull('order_id')
-                                            ->where('user_id',auth()->user()->id)
-                                            ->get();
-            //$out['tickets'] = $travel->tickets()->whereNotNull('order_id')->get()->toArray();
-
-            foreach ($allTickets as $ticket)
-            {
-               // return $ticket->order();
-                //$failedPayment =$ticket->order()->whereNull('payment_id');
-                $failedPayment = $ticket->where('user_id',auth()->user()->id)->with(['seats','order' =>  function($q){
-                    return $q->whereNull('payment_id');
-                }])->get()->toArray();
-                $paymentProgress = $ticket->where('user_id',auth()->user()->id)->with(['seats','order' =>  function($q){
-                    return $q->whereNotNull('payment_id');
-                }])->get();
-
-                if($data['status']== 'ordered')
-                {
-                    $out['tickets'] = $failedPayment;
-                    continue;
-                }
-
-                    foreach ($paymentProgress as $progress)
-                    {
-                           return $progress->order;
-                        $pending = $progress->payment()->where('status', 'pending')->get()->toArray();
-
-                        return $pending;
-                        $accepted = $progress->payment()->where('status', 'accepted')->get()->toArray();
-                        $rejected = $progress->payment()->where('status', 'rejected')->get()->toArray();
-                        if ($data['status'] == 'pending')
-                            $out['tickets'] = $pending;
-                        elseif ($data['status'] == 'accepted')
-                            $out['tickets'] = $accepted;
-                        elseif ($data['status'] == 'rejected')
-                            $out['tickets'] = $rejected;
-                        else {
-                            return "bad parameter";
-                        }
-
-                    }
-                }
-
-
-
-
-
-
-            return $out;
-        });
-
-
-//        foreach ($travels as $travel)
+//    public function orderedList(Request $request)
+//    {
+//
+//        $data = $request->validate([
+//           'status'=>'required'
+//        ]);
+//
+//
+//        $user = auth()->user()->id;
+//       $tickets = Ticket::where('user_id',$user)->with('seats')->get();
+//       $travelId = $tickets->pluck('travel_id')->unique();
+//        $travels = Travel::whereIn('id',$travelId)->get();
+//
+//
+//        $travels = $travels->map(function ($travel) use ($data)
 //        {
-//            $travelInfo = [];
-//            $travel->companyName = $travel->company->name;
-//            $travel->busName = $travel->busType->name;
 //            $travel->unSetRelation('company');
 //            $travel->unSetRelation('busType');
 //            $travel->unSetRelation('tickets');
 //
-//            $tickets->where('travel_id', $travel->id);
-//               // foreach($tickets as ticket)
-//            $travel->tickets = $tickets->where('travel_id',$travel->id)
-//                                       ->whereNotNull('order_id')->toArray();
-//            //array_push($travelInfo,$ticketList);
+//            $out = $travel->toArray();
+//            $out['companyName'] = $travel->company->name;
+//            $out['busName'] = $travel->busType->name;
+//            $allTickets = $travel->tickets()->whereNotNull('order_id')
+//                                            ->where('user_id',auth()->user()->id)
+//                                            ->get();
+//            //$out['tickets'] = $travel->tickets()->whereNotNull('order_id')->get()->toArray();
 //
-//            //$travel->tickets = $travelInfo;
+//            foreach ($allTickets as $ticket)
+//            {
+//               // return $ticket->order();
+//                //$failedPayment =$ticket->order()->whereNull('payment_id');
+//                $failedPayment = $ticket->where('user_id',auth()->user()->id)->with(['seats','order' =>  function($q){
+//                    return $q->whereNull('payment_id');
+//                }])->get()->toArray();
+//                $paymentProgress = $ticket->where('user_id',auth()->user()->id)->with(['seats','order' =>  function($q){
+//                    return $q->whereNotNull('payment_id');
+//                }])->get();
 //
-//        }
-
-        return $travels;
-    }
+//                if($data['status']== 'ordered')
+//                {
+//                    $out['tickets'] = $failedPayment;
+//                    continue;
+//                }
+//
+//                    foreach ($paymentProgress as $progress)
+//                    {
+//                           return $progress->order;
+//                        $pending = $progress->payment()->where('status', 'pending')->get()->toArray();
+//
+//                        return $pending;
+//                        $accepted = $progress->payment()->where('status', 'accepted')->get()->toArray();
+//                        $rejected = $progress->payment()->where('status', 'rejected')->get()->toArray();
+//                        if ($data['status'] == 'pending')
+//                            $out['tickets'] = $pending;
+//                        elseif ($data['status'] == 'accepted')
+//                            $out['tickets'] = $accepted;
+//                        elseif ($data['status'] == 'rejected')
+//                            $out['tickets'] = $rejected;
+//                        else {
+//                            return "bad parameter";
+//                        }
+//
+//                    }
+//                }
+//
+//
+//
+//
+//
+//
+//            return $out;
+//        });
+//
+//
+////        foreach ($travels as $travel)
+////        {
+////            $travelInfo = [];
+////            $travel->companyName = $travel->company->name;
+////            $travel->busName = $travel->busType->name;
+////            $travel->unSetRelation('company');
+////            $travel->unSetRelation('busType');
+////            $travel->unSetRelation('tickets');
+////
+////            $tickets->where('travel_id', $travel->id);
+////               // foreach($tickets as ticket)
+////            $travel->tickets = $tickets->where('travel_id',$travel->id)
+////                                       ->whereNotNull('order_id')->toArray();
+////            //array_push($travelInfo,$ticketList);
+////
+////            //$travel->tickets = $travelInfo;
+////
+////        }
+//
+//        return $travels;
+//    }
 
 
 

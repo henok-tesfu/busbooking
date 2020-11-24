@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\Sanctum;
+use function PHPUnit\Framework\isNull;
 
 class UserController extends Controller
 {
@@ -42,7 +43,7 @@ class UserController extends Controller
     public function login(Request $request)
     {
 
-        //dd($request);
+
         $data = $request->validate([
 
             'firebase_user_id' => [/*'exists:users,firebaseUserID',*/ 'required'],
@@ -123,8 +124,9 @@ class UserController extends Controller
         //return $user->id;
 
         $updateUser = auth()->user();
-        // if the user is the owner
 
+        // if the user is the owner
+       // also check the authorized person is a user
         if(auth()->check())
         {
             if(isset($date['full_name']))

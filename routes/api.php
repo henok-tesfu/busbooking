@@ -44,10 +44,10 @@ Route::post('/logout','App\Http\Controllers\AdminController@logout');
 
 
 //user
-Route::post('/user/login','App\Http\Controllers\UserController@login');
+Route::post('/user/login',[UserController::class,'login']);
 //Route::middleware('auth:sanctum')->get('/user/edit',[UserController::class,'index']);
 Route::middleware('auth:sanctum')->post('/user/{user}/update',[UserController::class,'update']);
-Route::middleware('auth:sanctum')->post('/user/login',[UserController::class,'logout']);
+Route::middleware('auth:sanctum')->post('/user/logout',[UserController::class,'logout']);
 
 
 //city

@@ -11,7 +11,7 @@ class Travel extends Model
 
     protected $with = [
       'startCity',
-      'dropOfCity',
+      'dropOfCity'
     ];
 
     public function tickets()
@@ -29,11 +29,11 @@ class Travel extends Model
     }
 
     public function startCity() {
-        return $this->belongsTo(City::class, 'startCityID');
+        return $this->belongsTo(City::class, 'startCityId');
     }
 
     public function dropOfCity() {
-        return $this->belongsTo(City::class, 'dropOfCityID');
+        return $this->belongsTo(City::class, 'dropOfCityId');
     }
 
 //    public function getStartCityNameAttribute() {

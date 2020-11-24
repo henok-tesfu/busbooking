@@ -19,7 +19,7 @@ class CreateAdminsTable extends Migration
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->string('email')->unique();
             $table->string('password');
-            $table->enum('type',['booking company','company']);
+            $table->enum('type',['booking_company','company']);
             $table->foreignId('role_id');
             $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
             $table->rememberToken();
