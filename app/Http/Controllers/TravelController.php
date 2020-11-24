@@ -36,6 +36,13 @@ class TravelController extends Controller
             return $travel;
         }
 
+         else {
+
+             return response('An authorized user',401);
+         }
+
+
+
 
     }
 

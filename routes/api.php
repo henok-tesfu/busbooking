@@ -84,7 +84,7 @@ Route::middleware('auth:sanctum')->get('/orders',[OrderController::class,'ordere
 Route::middleware('auth:sanctum')->get('/orders-list',[OrderController::class,'index']);
 
 //checker
-Route::middleware('auth:sanctum')->get('/validate/{id}',[CheckerController::class,'validateTicket']);
+Route::middleware('auth:sanctum')->get('/validate/{ticket}',[CheckerController::class,'validateTicket']);
 
 
 

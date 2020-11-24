@@ -9,19 +9,23 @@ use Illuminate\Http\Request;
 
 class CheckerController extends Controller
 {
-    public function validateTicket(Ticket $id)
+    public function validateTicket(Ticket $ticket)
     {
-        $ticket = Ticket::find($id);
-        if($ticket->status == 'used')
+        $checkTicket = $ticket;
+        $checkTicket->unSetRelation('seats');
+        $checkTicket->unSetRelation('order');
+        if($checkTicket->status)
         {
-           return "used ticket";
+           return response('used',410);
         }
         else {
+            //return "here";
             $order = Order::find($ticket->order_id);
             $payment = Payment::find($order->payment_id);
             if($payment->status == 'accepted')
             {
-                $ticket->status = "used";
+
+                $checkTicket->status = true;
                 $ticket->save();
                 return response(['welcome to our bus'],200);
             }

@@ -17,7 +17,7 @@ class CreateTicketsTable extends Migration
             $table->id('id');
             $table->foreignId('user_id');
             $table->foreignId('travel_id');
-            $table->boolean('status')->default(false);
+            $table->boolean('status')->default(0);
             $table->foreignId('order_id')->nullable();
             $table->string('for_name')->nullable();
             $table->string('for_phone_no')->nullable();
