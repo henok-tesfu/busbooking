@@ -18,6 +18,20 @@ class TravelController extends Controller
     public function index()
     {
 
+        $user = request()->user();
+
+         if($user->type == 'booking_company')
+         {
+             $travel = Travel::all();
+             return $travel;
+         }
+         else if($user->type == 'company')
+        {
+            $travel = Travel::where('id',$user->company_id)->get();
+            return $travel;
+        }
+
+
     }
 
 

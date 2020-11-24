@@ -66,7 +66,7 @@ Route::middleware('auth:sanctum')->post('/book-travel',[TravelController::class,
 Route::middleware('auth:sanctum')->post('/book-travel/order',[TravelController::class,'order']);
 
  //**************Travel for Company
-Route::middleware('auth:sanctum')->get('/travel',[TravelController::class,'reservedSeats']);
+Route::middleware('auth:sanctum')->get('/travel',[TravelController::class,'index']);
 Route::middleware('auth:sanctum')->post('/travel/create',[TravelController::class,'create']);
 
 

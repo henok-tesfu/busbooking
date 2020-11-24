@@ -40,7 +40,7 @@ class AdminController extends Controller
 
         return response([
             'password' => ['The provided credentials are incorrect.'],
-        ],402);
+        ],401);
 
     }
     public function logout(Request $request)
