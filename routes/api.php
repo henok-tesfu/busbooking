@@ -59,11 +59,15 @@ Route::middleware('auth:sanctum')->get('/city/create',[CityController::class,'cr
 Route::middleware('auth:sanctum')->post('/city/update',[CityController::class,'store']);
 
 //travel
-Route::middleware('auth:sanctum')->post('/travel/create',[TravelController::class,'create']);
+
 Route::post('/city/available-travel',[TravelController::class,'availableTravel']);
 Route::get('/reserved-seats/{travel}',[TravelController::class,'reservedSeats']);
 Route::middleware('auth:sanctum')->post('/book-travel',[TravelController::class,'bookTravel']);
 Route::middleware('auth:sanctum')->post('/book-travel/order',[TravelController::class,'order']);
+
+ //**************Travel for Company
+Route::middleware('auth:sanctum')->get('/travel',[TravelController::class,'reservedSeats']);
+Route::middleware('auth:sanctum')->post('/travel/create',[TravelController::class,'create']);
 
 
 //Bank

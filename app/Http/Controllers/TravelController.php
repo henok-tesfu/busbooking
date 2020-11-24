@@ -14,6 +14,13 @@ use Illuminate\Http\Request;
 
 class TravelController extends Controller
 {
+
+    public function index()
+    {
+
+    }
+
+
     public function availableTravel(Request $request)
     {
         $data = $request->validate([
@@ -165,10 +172,11 @@ class TravelController extends Controller
         if(auth()->check())
         {
             //$reserveSeat = new Seat();
-            $price = Travel::find($data['travel_id'])->price;
+            $price = Travel::find($data['travel_id']);
             $order = new Order();
             $order->user_id = auth()->user()->id;
-            $order->total_price = $price * count($seats);
+            $order->total_price = $price->price * count($seats);
+            $order->company_id = $price->company_id;
             $order->save();
             for($i=0;$i<sizeof($seats);$i++)
             {
