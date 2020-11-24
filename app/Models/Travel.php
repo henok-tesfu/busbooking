@@ -11,7 +11,9 @@ class Travel extends Model
 
     protected $with = [
       'startCity',
-      'dropOfCity'
+      'dropOfCity',
+        'busType',
+        'company'
     ];
 
     public function tickets()

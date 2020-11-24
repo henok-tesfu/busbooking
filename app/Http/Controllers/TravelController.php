@@ -22,12 +22,17 @@ class TravelController extends Controller
 
          if($user->type == 'booking_company')
          {
-             $travel = Travel::all();
-             return $travel;
+
+
+             $travels = Travel::all();
+
+             return $travels;
          }
          else if($user->type == 'company')
         {
+
             $travel = Travel::where('id',$user->company_id)->get();
+
             return $travel;
         }
 
