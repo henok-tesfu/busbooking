@@ -351,4 +351,10 @@ class TravelController extends Controller
 
     }
 
+
+    public function show(Travel $travel)
+    {
+      return response()->json($travel);
+    }
+
 }
