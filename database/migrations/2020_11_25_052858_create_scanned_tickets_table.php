@@ -15,6 +15,10 @@ class CreateScannedTicketsTable extends Migration
     {
         Schema::create('scanned_tickets', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('checker_id');
+            $table->foreignId('ticket_id');
+            $table->foreign('checker_id')->references('id')->on('admins');
+            $table->foreign('ticket_id')->references('id')->on('tickets');
             $table->timestamps();
         });
     }

@@ -7,6 +7,7 @@ use App\Http\Controllers\TravelController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\CheckerController;
+use App\Http\Controllers\ScannedTicketController;
 use Illuminate\Support\Facades\App;
 use APP\Http\Controllers;
 use App\Http\Controllers\CompanyController;
@@ -88,7 +89,7 @@ Route::middleware('auth:sanctum')->get('/orders-list',[OrderController::class,'i
 
 //checker
 Route::middleware('auth:sanctum')->get('/validate/{ticket}',[CheckerController::class,'validateTicket']);
-
+Route::middleware('auth:sanctum')->get('/scanned-ticket',[ScannedTicketController::class,'index']);
 
 
 

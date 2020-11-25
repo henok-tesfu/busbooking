@@ -14,7 +14,9 @@ class ScannedTicketController extends Controller
      */
     public function index()
     {
-        //
+        $cheker = request()->user();
+        $scannedTickets = ScannedTicket::where('checker_id',$cheker->id)->get();
+        return $scannedTickets;
     }
 
     /**

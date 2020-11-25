@@ -13,7 +13,8 @@ class Travel extends Model
       'startCity',
       'dropOfCity',
         'busType',
-        'company'
+        'company',
+        'tickets'
     ];
 
     public function tickets()
