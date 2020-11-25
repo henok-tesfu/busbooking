@@ -121,13 +121,14 @@ class UserController extends Controller
         ]);
         //return $request->user();// the user who is authorized
 
-        //return $user->id;
+
 
         $updateUser = auth()->user();
-
+//        $fireBaseId = User::where('id',$updateUser->id)->whereNotNull('firebase_user_id')->firstOrFail();
+//         return $fireBaseId;
         // if the user is the owner
        // also check the authorized person is a user
-        if(auth()->check())
+        if(auth()->check() && $updateUser->firebase_user_id)
         {
             if(isset($date['full_name']))
             $updateUser->full_name = $date['full_name'];

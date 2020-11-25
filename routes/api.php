@@ -60,6 +60,7 @@ Route::middleware('auth:sanctum')->post('/city/update',[CityController::class,'s
 
 //travel
 
+
 Route::post('/city/available-travel',[TravelController::class,'availableTravel']);
 Route::get('/reserved-seats/{travel}',[TravelController::class,'reservedSeats']);
 Route::middleware('auth:sanctum')->post('/book-travel',[TravelController::class,'bookTravel']);
