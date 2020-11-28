@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\ScannedTicket;
+use App\Models\Ticket;
+use App\Models\Travel;
 use Illuminate\Http\Request;
 
 class ScannedTicketController extends Controller
@@ -14,74 +16,27 @@ class ScannedTicketController extends Controller
      */
     public function index()
     {
+
         $cheker = request()->user();
         $scannedTickets = ScannedTicket::where('checker_id',$cheker->id)->get();
-        return $scannedTickets;
+
+        $tickets = [];
+        foreach ($scannedTickets as $scanned)
+        {
+
+            $ticket = Ticket::find($scanned->ticket_id);
+             $travel = Travel::find($ticket->travel_id);
+             $ticket->startCity =$travel->startCity;
+            $ticket->dropOfCity =$travel->dropOfCity;
+            $ticket->company = $travel->company;
+
+            array_push($tickets,$ticket);
+
+
+        }
+
+        return $tickets;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\ScannedTicket  $scannedTicket
-     * @return \Illuminate\Http\Response
-     */
-    public function show(ScannedTicket $scannedTicket)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\ScannedTicket  $scannedTicket
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(ScannedTicket $scannedTicket)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ScannedTicket  $scannedTicket
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, ScannedTicket $scannedTicket)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\ScannedTicket  $scannedTicket
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(ScannedTicket $scannedTicket)
-    {
-        //
-    }
 }

@@ -70,8 +70,10 @@ Route::middleware('auth:sanctum')->post('/book-travel/order',[TravelController::
  //**************Travel for Company
 Route::middleware('auth:sanctum')->get('/travel',[TravelController::class,'index']);
 Route::middleware('auth:sanctum')->post('/travel/create',[TravelController::class,'create']);
-Route::middleware('auth:sanctum')->get('/travel/{travel}',[TravelController::class,'show']);
 
+Route::get('/travel/{travel}',[TravelController::class,'show']);
+
+Route::middleware('auth:sanctum')->get('/travel/admin/{travel}',[TravelController::class,'showAdmin']);
 
 //Bank
 Route::get('/bank',[BankController::class,'index']);
@@ -89,8 +91,7 @@ Route::middleware('auth:sanctum')->get('/orders-list',[OrderController::class,'i
 
 //checker
 Route::middleware('auth:sanctum')->get('/validate/{ticket}',[CheckerController::class,'validateTicket']);
-Route::middleware('auth:sanctum')->get('/scanned-ticket',[ScannedTicketController::class,'index']);
-
+Route::middleware('auth:sanctum')->get('/scanned-tickets',[ScannedTicketController::class,'index']);
 
 
 

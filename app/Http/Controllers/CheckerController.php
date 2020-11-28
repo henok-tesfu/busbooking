@@ -13,36 +13,48 @@ class CheckerController extends Controller
 {
     public function validateTicket(Ticket $ticket)
     {
+
         $checkTicket = $ticket;
         //$checkTicket->unSetRelation('seats');
         $checkTicket->unSetRelation('order');
-        $travel = Travel::find($checkTicket->travel_id);
+        $travel = Travel::findOrFail($checkTicket->travel_id);
+
 
         //$travel->unSetRelation('company');
         $travel->unsetRelation('tickets');
         $travel->unSetRelation('busType');
       $checker = request()->user();
 
-      if($checker->type == 'checker')
+      if($checker->type == 'company')
       {
           if($checkTicket->status)
           {
               $ticket->travel = $travel;
               return response(['used',$ticket],410);
+
           }
           else {
-              //return "here";
-              $order = Order::find($ticket->order_id);
-              $payment = Payment::find($order->payment_id);
+
+              $order = Order::findorFail($ticket->order_id);
+
+              $payment = Payment::findorFail($order->payment_id);
+
+              if(!$payment)
+              {
+                  return response('dose not existing');
+              }
+
               if($payment->status == 'accepted')
               {
 
                   $checkTicket->status = true;
-                  $checkTicket->travel = $travel;
                   $ticket->save();
+                  $checkTicket->travel = $travel;
+
                   $scannedTicket = new ScannedTicket();
                   $scannedTicket->checker_id = $checker->id;
                   $scannedTicket->ticket_id = $ticket->id;
+                  $scannedTicket->save();
                 return response(['welcome to our bus',$ticket],200);
             }
           }

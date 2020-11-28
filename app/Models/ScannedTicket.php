@@ -9,6 +9,7 @@ class ScannedTicket extends Model
 {
     use HasFactory;
     protected $guarded = [];
+    protected $with = ['ticket'];
 
     public function checker()
     {
@@ -18,5 +19,7 @@ class ScannedTicket extends Model
     {
         return $this->belongsTo(Ticket::class);
     }
+
+
 
 }
