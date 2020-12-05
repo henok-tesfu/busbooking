@@ -56,7 +56,7 @@ Route::middleware('auth:sanctum')->post('/user/logout',[UserController::class,'l
 //city
 Route::get('/citybus',[CityController::class,'index']);
 Route::post('/city/category',[CityTransportController::class,'index']);
-Route::get('/city/from/{city}',[CityController::class,'travelFrom']);
+Route::get('/city/{busType}/from/{city}/',[CityTransportController::class,'travelFrom']);
 
 //create if only super admin
 Route::middleware('auth:sanctum')->get('/city/create',[CityController::class,'create']);

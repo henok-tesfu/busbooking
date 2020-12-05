@@ -6,6 +6,7 @@ use App\Models\BusType;
 use App\Models\City;
 use App\Models\Travel;
 use Illuminate\Http\Request;
+use function PHPUnit\Framework\isNull;
 
 class CityTransportController extends Controller
 {
@@ -82,15 +83,63 @@ class CityTransportController extends Controller
         //
     }
 
+    public function show(City $city)
+    {
+        return "here";
+    }
     /**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function travelFrom($busType,City $city)
     {
-        //
+
+        //return $city;
+        $cities = [];
+
+        $travelFrom = [];
+        $vehicles = BusType::where('vehicle_type',$busType)->get();
+        // return $vehicles;
+        foreach ($vehicles as $vehicle)
+        {
+            $travel = Travel::where('startCityId',$city->id)
+                ->where('busType_id',$vehicle->id)->first();
+            if ($travel) {
+
+
+                $travel->unSetRelation('tickets');
+                $travel->unSetRelation('startCity');
+                $travel->unSetRelation('dropOfCity');
+                $travel->unSetRelation('busType');
+                $travel->unSetRelation('company');
+
+
+                array_push($travelFrom, $travel->dropOfCityId);
+
+            }
+
+        }
+
+
+
+
+        foreach ($travelFrom as $travel)
+        {
+            if($this->dataExists($cities ,City::find($travel))){
+
+            }
+            else{
+                array_push($cities,City::find($travel));
+            }
+
+            //array_push($cities,City::find($travel));
+        }
+
+        return $cities;
+
+
     }
 
     /**
