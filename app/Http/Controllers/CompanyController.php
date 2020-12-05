@@ -18,17 +18,16 @@ class CompanyController extends Controller
 
       return $con;
 
-
     }
+
 
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-
     }
 
     /**
@@ -39,15 +38,26 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
-        $date = $request->validate([
-            'name'=>'required|string'
+//        $date = $request->validate([
+//            'name'=>'required|string'
+//
+//        ]);
+//
+//        $newCompany = new Company();
+//        $newCompany->name = $date['name'];
+//        $newCompany->save();
+//        return "successfully created!";
+
+        $data = $request->validate([
+            'name'=>['required'],
 
         ]);
-
-        $newCompany = new Company();
-        $newCompany->name = $date['name'];
-        $newCompany->save();
-        return "successfully created!";
+        $superAdmin = request()->user();
+        if ($superAdmin->type == "booking_company")
+        {
+            $company = Company::create($data);
+            return $company;
+        }
     }
 
     /**
@@ -58,7 +68,8 @@ class CompanyController extends Controller
      */
     public function show(Company $company)
     {
-        //
+
+        return $company;
     }
 
     /**
@@ -69,7 +80,7 @@ class CompanyController extends Controller
      */
     public function edit(Company $company)
     {
-        //
+
     }
 
     /**
@@ -81,7 +92,15 @@ class CompanyController extends Controller
      */
     public function update(Request $request, Company $company)
     {
-        //
+        $data = $request->validate([
+            'name'=>'required'
+        ]);
+        $Admin = request()->user();
+
+        if(auth()->check())
+            $company->update($data);
+
+
     }
 
     /**

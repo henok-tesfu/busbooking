@@ -32,7 +32,8 @@ class TravelController extends Controller
          else if($user->type == 'company')
         {
 
-            $travel = Travel::where('id',$user->company_id)->get();
+
+            $travel = Travel::where('company_id',$user->company_id)->get();
 
             return $travel;
         }
@@ -53,21 +54,18 @@ class TravelController extends Controller
         $data = $request->validate([
            'fromId'=>'required',
             'toId'=>'required',
-           // 'dateType'=>'required',
-            'date'=>'required'
+            'date'=>'required',
+            'vehicle_type'=>[']required','exist:bus_types,vehicle_type']
         ]);
 
 
         $travels =[];
 
 
-                $travels = Travel::where('startCityID',1)
+                $travels = Travel::where('startCityID',$data['fromId'])
                     ->where('dropOfCityID',$data['toId'])
                     ->where('local',$data['date'])->get();
 
-               //return $travels->first()->tickets;
-
-        //All the travels $travels with d/f busType
 
         $seatConcated = [];
 
@@ -233,7 +231,7 @@ class TravelController extends Controller
     }
 
 
-    
+
 
     public function create(Request $request)
     {
@@ -252,6 +250,8 @@ class TravelController extends Controller
        ]);
            $create = Travel::create($data);
 
+           return $create;
+
     }
 
 
@@ -265,6 +265,7 @@ class TravelController extends Controller
 
     public function showAdmin(Travel $travel)
     {
+
         return response()->json($travel);
     }
 

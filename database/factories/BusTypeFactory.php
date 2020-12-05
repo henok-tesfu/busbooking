@@ -24,6 +24,7 @@ class BusTypeFactory extends Factory
     {
         return [
             'name'=>'BTN '.$this->faker->name,
+            'vehicle_type'=>'bus',
             'capacity'=>65
         ];
     }

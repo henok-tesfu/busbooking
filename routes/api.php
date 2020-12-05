@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CityController;
+use App\Http\Controllers\CityTransportController;
 use App\Http\Controllers\TravelController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\PaymentController;
@@ -32,10 +33,10 @@ use Illuminate\Support\Facades\Route;
 
 
 //company
-Route::get('/company', [[CompanyController::class,'index']]);
-Route::middleware('auth:sanctum')->post('/company/create',[CompanyController::class,'create']);
-
-
+Route::get('/companies', [CompanyController::class,'index']);
+Route::middleware('auth:sanctum')->post('/companies',[CompanyController::class,'store']);
+Route::middleware('auth:sanctum')->get('/companies/{company}',[CompanyController::class,'show']);
+Route::middleware('auth:sanctum')->post('/companies/{company}',[CompanyController::class,'update']);
 //admin
 Route::post('/login',[AdminController::class, 'login']);
 Route::middleware('auth:sanctum')->get('/admin/login','App\Http\Controllers\AdminController@index');
@@ -46,18 +47,20 @@ Route::post('/logout','App\Http\Controllers\AdminController@logout');
 
 //user
 Route::post('/user/login',[UserController::class,'login']);
-//Route::middleware('auth:sanctum')->get('/user/edit',[UserController::class,'index']);
+
+Route::middleware('auth:sanctum')->get('/user',[UserController::class,'show']);
 Route::middleware('auth:sanctum')->post('/user/{user}/update',[UserController::class,'update']);
 Route::middleware('auth:sanctum')->post('/user/logout',[UserController::class,'logout']);
 
 
 //city
-Route::get('/city',[CityController::class,'index']);
+Route::get('/citybus',[CityController::class,'index']);
+Route::post('/city/category',[CityTransportController::class,'index']);
 Route::get('/city/from/{city}',[CityController::class,'travelFrom']);
 
 //create if only super admin
 Route::middleware('auth:sanctum')->get('/city/create',[CityController::class,'create']);
-Route::middleware('auth:sanctum')->post('/city/update',[CityController::class,'store']);
+Route::middleware('auth:tsanctum')->post('/city/update',[CityController::class,'store']);
 
 //travel
 

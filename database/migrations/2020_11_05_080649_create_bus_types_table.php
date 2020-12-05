@@ -16,6 +16,7 @@ class CreateBusTypesTable extends Migration
         Schema::create('bus_types', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
+            $table->enum('vehicle_type',['bus','train','private']);
             $table->unsignedInteger('left_column_spam')->default(2);
             $table->unsignedInteger('left_row_spam')->default(15);
             $table->unsignedInteger('right_column_spam')->default(2);

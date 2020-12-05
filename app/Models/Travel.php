@@ -39,9 +39,7 @@ class Travel extends Model
         return $this->belongsTo(City::class, 'dropOfCityId');
     }
 
-//    public function getStartCityNameAttribute() {
-//        return $this->startCity->name;
-//    }
+
 //
 //    public function getDropOfCityNameAttribute() {
 //        return $this->dropOfCity->name;

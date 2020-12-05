@@ -26,8 +26,8 @@ class TravelFactory extends Factory
     {
         $company = Company::all();
         return [
-            'startCityID'=>1,
-            'dropOfCityID'=>2,
+            'startCityId'=>1,
+            'dropOfCityId'=>2,
             'travel_km'=>100,
             'travel_pickup_time' => '03:30:PM',
             'travel_minutes'=>4000,

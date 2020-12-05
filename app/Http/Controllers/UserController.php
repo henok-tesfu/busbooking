@@ -26,9 +26,13 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function show()
     {
-        //
+        if(auth()->check())
+        return request()->user();
+        else
+        return response()->json(['An UnAuthorized'],401);
+
     }
 
     /**
