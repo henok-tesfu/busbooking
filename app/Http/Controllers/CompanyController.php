@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use App\Models\Admin;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class CompanyController extends Controller
 {
@@ -14,10 +16,28 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        $con = Company::all();
+        $companies = Company::orderBy('created_at', 'desc')->paginate(10);
 
-      return $con;
+      return $companies;
 
+    }
+
+
+    public function addAccount(Request $request)
+    {
+        $data = $request->validate([
+            'email' => 'required',
+            'company_id' => 'required',
+            'password' => 'required'
+        ]);
+
+        $data['type'] = 'company';
+        $data['role_id'] = 4;
+        $data['password'] = Hash::make($data['password']);
+
+        $account = Admin::create($data);
+
+        return $account;
     }
 
 
@@ -56,6 +76,18 @@ class CompanyController extends Controller
         if ($superAdmin->type == "booking_company")
         {
             $company = Company::create($data);
+
+            if ($request->has('email') && $request->has('password')) {
+                $data = [
+                    'email' => $request->email,
+                    'password' => Hash::make($request->password),
+                    'type' => 'company',
+                    'role_id' => 4,
+                    'company_id' => $company->id
+                ];
+
+                $account = Admin::create($data);
+            }
             return $company;
         }
     }
