@@ -30,13 +30,22 @@ use Illuminate\Support\Facades\Route;
 
 
 
+Route::group(['prefix' => '/admin'], function() {
+	//company
+	Route::middleware('auth:sanctum')->get('/companies', [CompanyController::class,'index']);
+	Route::middleware('auth:sanctum')->post('/companies',[CompanyController::class,'store']);
+	Route::middleware('auth:sanctum')->post('/companies/add-account',[CompanyController::class,'addAccount']);
+	Route::middleware('auth:sanctum')->get('/companies/{company}',[CompanyController::class,'show']);
+	Route::middleware('auth:sanctum')->post('/companies/{company}',[CompanyController::class,'update']);
+
+	// order
+	Route::middleware('auth:sanctum')->get('/orders',[OrderController::class,'list']);
+
+	// Travel	
+	Route::middleware('auth:sanctum')->get('/travel',[TravelController::class,'adminIndex']);
+});
 
 
-//company
-Route::get('/companies', [CompanyController::class,'index']);
-Route::middleware('auth:sanctum')->post('/companies',[CompanyController::class,'store']);
-Route::middleware('auth:sanctum')->get('/companies/{company}',[CompanyController::class,'show']);
-Route::middleware('auth:sanctum')->post('/companies/{company}',[CompanyController::class,'update']);
 //admin
 Route::post('/login',[AdminController::class, 'login']);
 Route::middleware('auth:sanctum')->get('/admin/login','App\Http\Controllers\AdminController@index');

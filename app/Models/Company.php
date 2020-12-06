@@ -10,6 +10,10 @@ class Company extends Model
     use HasFactory;
     protected $guarded = [];
 
+    protected $with = [
+      'admins'
+    ];
+
     public function admins()
     {
 
