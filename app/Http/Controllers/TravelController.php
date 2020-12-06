@@ -55,16 +55,22 @@ class TravelController extends Controller
            'fromId'=>'required',
             'toId'=>'required',
             'date'=>'required',
-            'vehicle_type'=>[']required','exist:bus_types,vehicle_type']
+            'vehicle_type'=>['required']
         ]);
 
 
         $travels =[];
 
+        $vehicles = BusType::where('vehicle_type',$data['vehicle_type'])->get()->pluck('id');
 
-                $travels = Travel::where('startCityID',$data['fromId'])
-                    ->where('dropOfCityID',$data['toId'])
-                    ->where('local',$data['date'])->get();
+
+            $travels = Travel::where('startCityID',$data['fromId'])
+                ->where('dropOfCityID',$data['toId'])
+                ->where('local',$data['date'])
+                ->whereIn('busType_id',$vehicles->toArray())->get();
+
+
+
 
 
         $seatConcated = [];
