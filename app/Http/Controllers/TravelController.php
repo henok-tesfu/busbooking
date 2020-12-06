@@ -48,6 +48,38 @@ class TravelController extends Controller
 
     }
 
+    public function adminIndex()
+    {
+
+        $user = request()->user();
+
+         if($user->type == 'booking_company')
+         {
+
+
+             $travels = Travel::orderBy('created_at', 'desc')->paginate(10);
+
+             return $travels;
+         }
+         else if($user->type == 'company')
+        {
+
+
+            $travel = Travel::where('company_id',$user->company_id)->orderBy('created_at', 'desc')->paginate(10);
+
+            return $travel;
+        }
+
+         else {
+
+             return response('An authorized user',401);
+         }
+
+
+
+
+    }
+
 
     public function availableTravel(Request $request)
     {
