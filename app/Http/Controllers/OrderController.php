@@ -238,9 +238,59 @@ class OrderController extends Controller
        else{
            return response(['an Authorized user'],401);
        }
+    }
 
 
+    public function list()
+    {
+      $superAdmin = request()->user();
+       if($superAdmin->type == 'booking_company')
+       {
+           $orders = Order::orderBy('created_at', 'desc')->paginate(10);
 
+           foreach ($orders as $order)
+           {
+
+
+               $userName = User::find($order->user_id)->full_name;
+
+               $paymentCheck = Payment::find($order->payment_id);
+               if($paymentCheck)
+                $payment = $paymentCheck->status;
+               else
+                   $payment = "not paid";
+               $numberOfTicket = Ticket::where('order_id',$order->id)->count();
+               $order->name =$userName;
+               $order->paymentStatus =$payment;
+               $order->numberOfTicket =$numberOfTicket;
+           }
+           return $orders;
+       }
+       elseif ($superAdmin->type == 'company')
+       {
+           $orders = Order::where('company_id',$superAdmin->company_id)->orderBy('created_at', 'desc')->paginate(10);
+           foreach ($orders as $order)
+           {
+
+
+               $userName = User::find($order->user_id)->full_name;
+
+               $paymentCheck = Payment::find($order->payment_id);
+               if($paymentCheck)
+                   $payment = $paymentCheck->status;
+               else
+                   $payment = "not paid";
+               $numberOfTicket = Ticket::where('order_id',$order->id)->count();
+               $order->name =$userName;
+               $order->paymentStatus =$payment;
+               $order->numberOfTicket =$numberOfTicket;
+           }
+           return $orders;
+       }
+
+       else{
+           return response(['an Authorized user'],401);
+       }
     }
 
     public function show(Order $order)
