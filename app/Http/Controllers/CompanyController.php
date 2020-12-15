@@ -14,9 +14,17 @@ class CompanyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $companies = Company::orderBy('created_at', 'desc')->paginate(10);
+        $con = Company::all();
+
+        return $con;
+
+    }
+
+    public function adminIndex(Request $request)
+    {
+        $companies = Company::orderBy('created_at', 'desc')->paginate(($request->has('per_page') && $request->per_page) ? $request->per_page : 10);
 
       return $companies;
 

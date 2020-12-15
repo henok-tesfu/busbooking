@@ -8,6 +8,8 @@ use App\Http\Controllers\TravelController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\CheckerController;
+use App\Http\Controllers\BusTypeController;
+use App\Http\Controllers\TravelProfileController;
 use App\Http\Controllers\ScannedTicketController;
 use Illuminate\Support\Facades\App;
 use APP\Http\Controllers;
@@ -32,7 +34,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => '/admin'], function() {
 	//company
-	Route::middleware('auth:sanctum')->get('/companies', [CompanyController::class,'index']);
+	Route::middleware('auth:sanctum')->get('/companies', [CompanyController::class,'adminIndex']);
 	Route::middleware('auth:sanctum')->post('/companies',[CompanyController::class,'store']);
 	Route::middleware('auth:sanctum')->post('/companies/add-account',[CompanyController::class,'addAccount']);
 	Route::middleware('auth:sanctum')->get('/companies/{company}',[CompanyController::class,'show']);
@@ -41,10 +43,35 @@ Route::group(['prefix' => '/admin'], function() {
 	// order
 	Route::middleware('auth:sanctum')->get('/orders',[OrderController::class,'list']);
 
+
+	// travel profiles
+	Route::middleware('auth:sanctum')->get('/travel-profiles',[TravelProfileController::class,'index']);
+	Route::middleware('auth:sanctum')->post('/travel-profiles',[TravelProfileController::class,'store']);
+
+
 	// Travel	
-	Route::middleware('auth:sanctum')->get('/travel',[TravelController::class,'adminIndex']);
+	Route::middleware('auth:sanctum')->get('/travels',[TravelController::class,'adminIndex']);
+	Route::middleware('auth:sanctum')->post('/travels',[TravelController::class,'create']);
+
+
+	// Cities	
+	Route::middleware('auth:sanctum')->get('/cities',[CityController::class,'adminIndex']);
+	Route::middleware('auth:sanctum')->post('/cities',[CityController::class,'store']);
+	Route::middleware('auth:sanctum')->post('/cities/{city}',[CityController::class,'update']);
+
+
+	// Bus type	
+	Route::middleware('auth:sanctum')->get('/bus-types',[BusTypeController::class,'index']);
+	Route::middleware('auth:sanctum')->post('/bus-types',[BusTypeController::class,'store']);
+	Route::middleware('auth:sanctum')->get('/bus-types/{bus_type}',[BusTypeController::class,'show']);
+	Route::middleware('auth:sanctum')->post('/bus-types/{bus_type}',[BusTypeController::class,'update']);
 });
 
+//company
+Route::get('/companies', [CompanyController::class,'index']);
+Route::middleware('auth:sanctum')->post('/companies',[CompanyController::class,'store']);
+Route::middleware('auth:sanctum')->get('/companies/{company}',[CompanyController::class,'show']);
+Route::middleware('auth:sanctum')->post('/companies/{company}',[CompanyController::class,'update']);
 
 //admin
 Route::post('/login',[AdminController::class, 'login']);
@@ -66,6 +93,9 @@ Route::middleware('auth:sanctum')->post('/user/logout',[UserController::class,'l
 Route::get('/citybus',[CityController::class,'index']);
 Route::post('/city/category',[CityTransportController::class,'index']);
 Route::get('/city/{busType}/from/{city}/',[CityTransportController::class,'travelFrom']);
+
+//city modified
+Route::get('/city',[CityController::class,'getCityByType']);
 
 //create if only super admin
 Route::middleware('auth:sanctum')->get('/city/create',[CityController::class,'create']);
