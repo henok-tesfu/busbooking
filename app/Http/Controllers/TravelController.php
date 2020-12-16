@@ -99,55 +99,62 @@ class TravelController extends Controller
             'fromId' => 'required',
             'toId' => 'required',
             'date' => 'required',
-            'vehicle_type' => ['required']
+            'type' => 'required'
         ]);
-
 
         $travels = [];
 
-        $vehicles = BusType::where('vehicle_type', $data['vehicle_type'])->get()->pluck('id');
+        $vehicleType = $request->type;
+
+        $busType = BusType::where("vehicle_type", $vehicleType)->get();
+
+        foreach ($busType as $bust) {
+            $listOfTravels = Travel::where("busType_id", $bust->id)->where('startCityID', $data['fromId'])
+                ->where('dropOfCityID', $data['toId'])
+                ->where('local', $data['date'])->get();
+            foreach ($listOfTravels as $travel) {
+                $start_city = City::find($travel->startCityId);
+                $drop_of_city = City::find($travel->dropOfCityId);
+
+                $travel->start_city = $start_city;
+                $travel->drop_of_city = $drop_of_city;
 
 
-        $travels = Travel::where('startCityID', $data['fromId'])
-            ->where('dropOfCityID', $data['toId'])
-            ->where('local', $data['date'])
-            ->whereIn('busType_id', $vehicles->toArray())->get();
+                $numberOfReservedSeats = 0;
+                $tickets = $travel->tickets;
 
-        $seatConcated = [];
+                foreach ($tickets as $ticket) {
+                    $seats = $ticket->seats;
+                    //return $seats;
+                    $reservedSeat = $seats->where('status', 'reserved')->count();
+                    $booked = $seats->where('status', 'booked')->count();
 
-        foreach ($travels as $travel) {
+                    $numberOfSeats = $reservedSeat + $booked;
 
-            $numberOfReservedSeats = 0;
-            $tickets = $travel->tickets;
+                    $numberOfReservedSeats = $numberOfReservedSeats + $numberOfSeats;
+                }
 
-            foreach ($tickets as $ticket) {
-                $seats = $ticket->seats;
-                //return $seats;
-                $reservedSeat = $seats->where('status', 'reserved')->count();
-                $booked = $seats->where('status', 'booked')->count();
+                $busId = BusType::where('id', $travel->busType_id)->first();
+                //$busId gives the busType
+                $availableSeats = $busId->capacity - $numberOfReservedSeats;
 
-                $numberOfSeats = $reservedSeat + $booked;
-
-                $numberOfReservedSeats = $numberOfReservedSeats + $numberOfSeats;
-            }
-
-            $busId = BusType::where('id', $travel->busType_id)->first();
-            //$busId gives the busType
-            $availableSeats = $busId->capacity - $numberOfReservedSeats;
-
-            $travel->numberOfavilableSeats = $availableSeats;
-            $travel->companyName = $travel->company->name;
-            $travel->busName = $travel->busType->name;
-            $travel->unSetRelation('company');
-            $travel->unsetRelation('tickets');
-            $travel->unSetRelation('busType');
-            if ($availableSeats > 0) {
-                array_push($seatConcated, $travel);
+                $travel->numberOfavilableSeats = $availableSeats;
+                $travel->companyName = $travel->company->name;
+                $travel->busName = $travel->busType->name;
+                $travel->unSetRelation('company');
+                $travel->unsetRelation('tickets');
+                $travel->unSetRelation('busType');
+                if ($availableSeats > 0) {
+                    array_push($travels, $travel);
+                }
             }
         }
 
-        return $seatConcated;
+
+
+        return $travels;
     }
+
     public function reservedSeats(Travel $travel)
     {
         $tickets = $travel->tickets;
