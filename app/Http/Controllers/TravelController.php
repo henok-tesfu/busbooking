@@ -272,7 +272,7 @@ class TravelController extends Controller
             'price' => 'required',
             'travel_km' => 'required',
             'travel_minutes' => 'required',
-            'travel_pickup_time' => ['required', 'date_format:H:i'],
+            'travel_pickup_time' => ['required', 'date_format:hh:mm:A'],
             'Gregorian' => ['required', 'date'],
             'local' => ['required', 'date']
         ]);
