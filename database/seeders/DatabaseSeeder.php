@@ -23,31 +23,25 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        City::factory()->create(['name' => 'Addis Ababa']);
+        City::factory()->create(['name' => 'Jimma']);
+        City::factory()->create(['name' => 'Gonder']);
+        City::factory()->create(['name' => 'Harrar']);
+        City::factory()->create(['name' => 'Tigray']);
 
-        //system owner the campany owner
-        $systemOwner = new Company();
-        $systemOwner->id =1;
-        $systemOwner->name ="system owner";
-        $systemOwner->save();
+        Company::factory()->create(['name' => 'Selam Bus']);
+        Company::factory()->create(['name' => 'Geda Bus']);
 
-        //role
-                //***superAdmin role
-
-
-        $city = new City();
-        $city->name = "Addis Ababa";
-        $city->save();
-
-        Company::factory(5)->create();
-        City::factory(10)->create();
-        Travel::factory(10)->create();
-        Travel::factory()->create(['startCityId'=>2]);
-        Travel::factory()->create(['startCityId'=>3]);
-        Travel::factory(5)->create(['startCityId'=>4]);
+        Travel::factory()->create(['startCityId'=>1, 'dropOfCityId' => 2]);
+        Travel::factory()->create(['startCityId'=>2, 'dropOfCityId' => 5]);
+        Travel::factory()->create(['startCityId'=>2, 'dropOfCityId' => 3]);
+        Travel::factory()->create(['startCityId'=>1, 'dropOfCityId' => 2]);
+        Travel::factory()->create(['startCityId'=>1, 'dropOfCityId' => 3]);
+        Travel::factory()->create(['startCityId'=>1, 'dropOfCityId' => 4]);
+        Travel::factory()->create(['startCityId'=>1, 'dropOfCityId' => 5]);
 
         //Ticket::factory()->create();
-        Seat::factory(20)->create();
+        // Seat::factory(20)->create();
 
 
         Bank::factory()->create(['name'=>'Commercial Bank','bank_logo'=>'https://res.cloudinary.com/jethenk/image/upload/v1605531551/download_llfsgj.jpg']);
@@ -64,7 +58,6 @@ class DatabaseSeeder extends Seeder
 
         $admin = new Admin();
         $admin->id = 1;
-        //$admin->company_id = 1;
         $admin->email = "systemOwner@systemOwner.com";
         $admin->type = "booking_company";
         $admin->password = Hash::make("password");
@@ -72,16 +65,8 @@ class DatabaseSeeder extends Seeder
         $admin->save();
 
         $admin = new Admin();
-        $admin->company_id = 2;
-        $admin->email = "companyAdmin2@companyAdmin2.com";
-        $admin->type = "company";
-        $admin->password = Hash::make("password");
-        $admin->role_id = 4;
-        $admin->save();
-
-        $admin = new Admin();
-        $admin->company_id = 3;
-        $admin->email = "companyAdmin3@companyAdmin3.com";
+        $admin->company_id = 1;
+        $admin->email = "admin@selamBus.com";
         $admin->type = "company";
         $admin->password = Hash::make("password");
         $admin->role_id = 4;
@@ -89,7 +74,7 @@ class DatabaseSeeder extends Seeder
 
         $admin = new Admin();
         $admin->company_id = 1;
-        $admin->email = "checker@checker.com";
+        $admin->email = "checker@selamBus.com";
         $admin->type = "company";
         $admin->password = Hash::make("password");
         $admin->role_id = 1;

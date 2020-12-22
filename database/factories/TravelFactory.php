@@ -32,7 +32,7 @@ class TravelFactory extends Factory
             'travel_pickup_time' => '03:30:PM',
             'travel_minutes'=>4000,
             'busType_id'=>BusType::factory()->create(),
-            'company_id'=>2,//$this->faker->unique()->randomElement($company->pluck('id')),
+            'company_id'=>1,//$this->faker->unique()->randomElement($company->pluck('id')),
             'side_number'=>'BU'.$this->faker->numberBetween(100,1000),
             'price'=>200,
             'Gregorian'=>date('y/m/d'),
